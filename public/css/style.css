@@ -1,0 +1,164 @@
+
+.view { display:none; }
+
+body {
+  padding:0;
+  margin:0;
+  font: 10px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+#commits-container {
+    border-right:1px solid #ddd;
+    padding:1em;
+    padding-right:2em;
+    width:300px;
+    overflow:scroll;
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+}
+
+#commits { 
+    list-style:none; 
+    padding:0; 
+    width:300px;
+    overflow:hidden;
+}
+
+#commits li { 
+    width:10000em; 
+    cursor:pointer;
+}
+
+#commits li canvas {
+    width:150px;
+    height:12px;
+    margin:-2px 0;
+}
+
+#commits li:hover { 
+    background:#444;
+    color:#fff;
+}
+
+#commit-tooltip {
+    position:fixed;
+    border:1px solid #ddd;
+    width:300px;
+    left:330px;
+    display:none;
+    background-color:#fff;
+    -webkit-box-shadow:0px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    box-shadow:0px 2px 2px 2px rgba(0, 0, 0, 0.2);
+    z-index:10;
+}
+
+hr { 
+    border-style:solid; 
+    border-bottom:none; 
+    border-color:#ddd;
+}
+
+#commit-tooltip .tooltip-section {
+    padding:1em;
+}
+
+#commit-tooltip #tooltip-name {
+    font-weight:bold;
+}
+
+#commit-tooltip #tooltip-date, #commit-date {
+    font-style:italic;
+}
+
+#commit-tooltip #tooltip-sha, #commit-display #commit-sha {
+    color:#bbb;
+}
+
+#commit-tooltip #tooltip-comment {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+#commit-display {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:330px;
+    width:400px;
+    border-right:1px solid #ddd;
+    overflow:scroll;
+}
+
+.commit-section { padding:1em; }
+
+#commit-display-header {
+    background-repeat:no-repeat;
+    background-position:top right;
+    background-size:44px 44px;
+}
+
+#commit-display pre {
+    white-space: pre-wrap;       /* css-3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
+.tree-directory span { font-weight:bold; }
+
+#commit-tree ul { padding-left:1em; list-style:square; }
+
+#commit-tree .log-file { font-weight:normal; color:#000; }
+#commit-tree .log-dir { font-weight:bold; color:#777; }
+
+#files-display {
+    position:fixed;
+    top:0;
+    left:730px;
+    right:0;
+    bottom:0;
+}
+
+#files-tabs {
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    height:100%;
+}
+
+#files-tabs .ui-tabs-nav {
+    border-bottom:1px solid #ddd;
+    padding:0 20px;
+}
+
+#files-tabs .ui-tabs-nav .ui-tabs-anchor span { color:#aaa; }
+#files-tabs .ui-tabs-nav li.ui-tabs-active {
+    border-left:1px solid #ddd;
+    border-right:1px solid #ddd;
+}
+#files-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor span { 
+    color:#000; 
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+#files-tabs pre { 
+    overflow:scroll; 
+    position:absolute; 
+    top:40px;
+    bottom:0;
+    right:0;
+    left:2em;
+}
+
+
+
+
+
