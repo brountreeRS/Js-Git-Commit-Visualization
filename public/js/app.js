@@ -1,36 +1,34 @@
 
 var repo, commits;
 
-function displayCommitGraph(cutoff) {
+function displayCommitGraph(cutoff, fn) {
     var 
         colors = [ 
-            "AntiqueWhite", "Aqua", "Aquamarine", 
-            "Beige", "Bisque", "Black", "BlanchedAlmond", "Blue", "BlueViolet", 
-            "Brown", "BurlyWood", "CadetBlue", "Chartreuse", "Chocolate", 
-            "Coral", "CornflowerBlue", "Cornsilk", "Crimson", "Cyan", 
-            "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", 
-            "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", 
-            "Darkorange", "DarkOrchid", "DarkRed", "DarkSalmon", 
-            "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", 
-            "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", 
-            "DimGray", "DimGrey", "DodgerBlue", "FireBrick", 
-            "ForestGreen", "Fuchsia", "GhostWhite", "Gold", 
-            "GoldenRod", "Gray", "Grey", "Green", "GreenYellow", 
-            "HotPink", "IndianRed", "Indigo", "Khaki", "Lavender", 
-            "LavenderBlush", "LawnGreen", "LemonChiffon", "Lime", 
-            "LimeGreen", "Magenta", "Maroon", "MediumAquaMarine", 
-            "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", 
-            "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", 
-            "MediumVioletRed", "MidnightBlue", "MistyRose", 
-            "Moccasin", "NavajoWhite", "Navy", "Olive", "OliveDrab", 
-            "Orange", "OrangeRed", "Orchid", "PaleGoldenRod", "PaleGreen", 
-            "PaleTurquoise", "PaleVioletRed", "PapayaWhip", "PeachPuff", 
-            "Peru", "Pink", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", 
-            "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", 
-            "Sienna", "Silver", "SkyBlue", "SlateBlue", 
-            "SlateGray", "SlateGrey", "SpringGreen", "SteelBlue", 
-            "Tan", "Teal", "Thistle", "Tomato", "Turquoise", "Violet", "Wheat", 
-            "Yellow", "YellowGreen"
+            // "AntiqueWhite", "Bisque", "Blue", "BlueViolet", 
+            // "Brown", "BurlyWood", "Chartreuse", "Chocolate", 
+            // "Coral", "Crimson", 
+            // "DarkBlue", "DarkCyan", "DarkGoldenRod", "DarkGray", "DarkGrey", 
+            // "DarkGreen", "DarkKhaki", "DarkMagenta", "DarkOliveGreen", 
+            // "Darkorange", "DarkOrchid", "DarkRed", "DarkSalmon", 
+            // "DarkSeaGreen", "DarkSlateBlue", "DarkSlateGray", "DarkSlateGrey", 
+            // "DarkTurquoise", "DarkViolet", "DeepPink", "DeepSkyBlue", 
+            // "DimGray", "DimGrey", "DodgerBlue", "FireBrick", 
+            // "ForestGreen", "GhostWhite", "Green", "GreenYellow", 
+            // "HotPink", "IndianRed", "Indigo", 
+            // "LawnGreen", "Lime", 
+            // "LimeGreen", "Magenta", "Maroon", "MediumAquaMarine", 
+            // "MediumBlue", "MediumOrchid", "MediumPurple", "MediumSeaGreen", 
+            // "MediumSlateBlue", "MediumSpringGreen", "MediumTurquoise", 
+            // "MediumVioletRed", "MidnightBlue", "MistyRose", 
+            // "Moccasin", "Navy", "Olive", "OliveDrab", 
+            // "Orange", "OrangeRed", "Orchid", "PapayaWhip", 
+            // "Peru", "Plum", "PowderBlue", "Purple", "Red", "RosyBrown", 
+            // "RoyalBlue", "SaddleBrown", "Salmon", "SandyBrown", "SeaGreen", 
+            // "Sienna", "Silver", "SkyBlue", 
+            // "SlateGray", "SlateGrey", "SpringGreen", "SteelBlue", 
+            // "Teal", "Thistle", "Tomato", "Turquoise", "Violet", 
+            // "YellowGreen"
+            "Red", "Blue", "Green", "Orange", "Purple"
         ],
         
         colorMap = [];
@@ -40,7 +38,10 @@ function displayCommitGraph(cutoff) {
     function disp(n) {
         var idx = cutoff - n;
 
-        if (n == -1) { return; }
+        if (n == -1) { 
+            if ($.isFunction(fn)) { fn(); }
+            return; 
+        }
 
         commits.get(
             idx,
@@ -80,12 +81,6 @@ function displayCommitGraph(cutoff) {
                     Math.random() * colors.length
                 )
             ];
-
-            // colorMap[node.index] = 
-            //     "#" + 
-            //     Math.floor(Math.random() * Math.pow(16,2) * 0.5 + 0.25).toString(16) +
-            //     Math.floor(Math.random() * Math.pow(16,2) * 0.5 + 0.25).toString(16) +
-            //     Math.floor(Math.random() * Math.pow(16,2) * 0.5 + 0.25).toString(16);
         }
 
         ctx.lineWidth = 1;
@@ -267,6 +262,36 @@ function setupCommitEvents() {
     });
 }
 
+function setupFilters() {
+    $("#filter-by-open")
+        .attr("disabled", false)
+        .on("click", function() {
+            if ($(this).is(":checked")) {
+                var open = $("#files-tabs .ui-tabs-active span").text();
+
+                $("#commits li").each(function() {
+                    var elem = $(this);
+                    commits.get(
+                        parseInt(
+                            $(this).data("index"), 
+                            10
+                        ), 
+                        function(node){
+                            node.commit.loadLog(function(log) {
+                                if (log.getFiles().indexOf(open) == -1) {
+                                    elem.addClass("filtered-out");
+                                }
+                            });
+                        }
+                    );
+                });
+            }
+            else {
+                $("#commits li.filtered-out")
+                    .removeClass("filtered-out");
+            }
+        });
+}
 
 var Workspace = Backbone.Router.extend({
     routes:{
@@ -287,12 +312,13 @@ var Workspace = Backbone.Router.extend({
         repo.getCommits(function(commits) {
             window.commits = commits;
 
-            displayCommitGraph(500);
+            displayCommitGraph(500, function() {
+                setupCommitEvents();
+            });
 
-            setupCommitEvents();
-
-            
         });
+
+        setupFilters();
 
         $("#files-tabs").tabs();
     }

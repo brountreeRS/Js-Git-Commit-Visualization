@@ -255,18 +255,21 @@ Repo.Commit.prototype.loadTree = function(fn) {
 };
 
 Repo.Commit.prototype.loadLog = function(fn) {
+    if (this._log) {
+        fn(this._log);
+    }
+
     var self = this;
     ShaProxy.load(
         this._repo.path,
         "log", 
         this.getSha(),
         function(rawLog) {
-            fn(
-                new Repo.LogEntry(
-                    self._repo,
-                    rawLog
-                )
+            self._log = new Repo.LogEntry(
+                self._repo,
+                rawLog
             );
+            fn(self._log);
         }
     );
 };
@@ -277,9 +280,17 @@ Repo.LogEntry = function(repo, raw) {
 };
 
 Repo.LogEntry.prototype.getFiles = function() {
-    return _.map(this._raw.diffs, function(diff) {
-        return diff.name;
-    });
+    if (this._fileNames) {
+        return this._fileNames;
+    }
+    else {
+        return this._fileNames = _.map(
+            this._raw.diffs, 
+            function(diff) {
+                return diff.name;
+            }
+        );
+    }
 };
 
 Repo.LogEntry.prototype.getTree = function() {

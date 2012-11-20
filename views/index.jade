@@ -2,6 +2,10 @@
     input(type = "text")
 #repo-view.view
     #commits-container
+        #commit-filters
+            div
+                label(for = "filter-by-open") Filter by Open File
+                input#filter-by-open(type = "checkbox", disabled = "true")
         ul#commits
     #commit-tooltip
         .tooltip-section
